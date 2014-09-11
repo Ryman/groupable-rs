@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::hash::Hash;
 
-trait Groupable<K, V> {
+pub trait Groupable<K, V> {
     fn group<B: FromKeyedIterator<K, V>>(&mut self) -> B;
 }
 
