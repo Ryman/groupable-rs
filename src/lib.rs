@@ -2,7 +2,25 @@
 use std::collections::{HashMap, TreeMap, SmallIntMap, TrieMap};
 use std::hash::Hash;
 
+/// Conversion from an `Iterator` of pairs.
 pub trait Groupable<K, V> {
+    /// Loops through the entire iterator, grouping all keys into a container
+    /// implementing `FromKeyedIterator` with a container of values per key.
+    /// The values will be aggregated per key into a container implementing
+    /// `Extendable` for the value type.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use std::collections::HashMap;
+    /// use groupable::Groupable;
+    ///
+    /// let evens = range(0u, 10).map(|i| (i % 2 == 0, i))
+    ///                         .group::<HashMap<bool, Vec<uint>>>();
+    ///
+    /// assert_eq!(evens[true].as_slice(), [0, 2, 4, 6, 8].as_slice());
+    /// assert_eq!(evens[false].as_slice(), [1, 3, 5, 7, 9].as_slice());
+    /// ```
     fn group<B: FromKeyedIterator<K, V>>(&mut self) -> B;
 }
 
@@ -12,7 +30,9 @@ impl<K, V, I: Iterator<(K, V)>> Groupable<K, V> for I {
     }
 }
 
+/// Conversion from an `Iterator` of key-value pairs.
 trait FromKeyedIterator<K, V> {
+    /// Build a container with groups of elements from an external iterator.
     fn from_keyed_iter<I: Iterator<(K, V)>>(I) -> Self;
 }
 
