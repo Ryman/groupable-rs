@@ -31,7 +31,7 @@ impl<K, V, I: Iterator<(K, V)>> Groupable<K, V> for I {
 }
 
 /// Conversion from an `Iterator` of key-value pairs.
-trait FromKeyedIterator<K, V> {
+pub trait FromKeyedIterator<K, V> {
     /// Build a container with groups of elements from an external iterator.
     fn from_keyed_iter<I: Iterator<(K, V)>>(I) -> Self;
 }
@@ -43,7 +43,7 @@ fn group_into<K,
               I: Iterator<(K, V)>,
               M: MutableMap<K, U>>(mut iter: I, map: &mut M) {
     for (key, val) in iter {
-        let val_iter = Some(val).move_iter();
+        let val_iter = Some(val).into_iter();
         match map.find_mut(&key) {
             Some(collection) => {
                 collection.extend(val_iter);
