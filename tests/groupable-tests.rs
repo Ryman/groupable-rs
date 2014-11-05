@@ -1,7 +1,7 @@
 #![feature(macro_rules)]
 extern crate groupable;
 
-use std::collections::{HashMap, TreeMap, SmallIntMap, TrieMap};
+use std::collections::{HashMap, TreeMap, VecMap, TrieMap};
 use groupable::Groupable;
 
 static XS : &'static [char] = ['h', 'b', 'i', 'y', '!', 'e'];
@@ -46,8 +46,8 @@ fn treemap() {
 
 #[test]
 fn smallintmap() {
-    test_string!(SmallIntMap<String>)
-    test_char_vec!(SmallIntMap<Vec<char>>)
+    test_string!(VecMap<String>)
+    test_char_vec!(VecMap<Vec<char>>)
 }
 
 #[test]

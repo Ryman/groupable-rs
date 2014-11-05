@@ -1,5 +1,5 @@
 #![feature(macro_rules)]
-use std::collections::{HashMap, TreeMap, SmallIntMap, TrieMap};
+use std::collections::{HashMap, TreeMap, VecMap, TrieMap};
 use std::hash::Hash;
 
 /// Conversion from an `Iterator` of pairs.
@@ -82,5 +82,5 @@ macro_rules! impl_uint_keyed_iter (
 
 impl_keyed_iter!(HashMap: Ord, Hash)
 impl_keyed_iter!(TreeMap: Ord)
-impl_uint_keyed_iter!(SmallIntMap)
+impl_uint_keyed_iter!(VecMap)
 impl_uint_keyed_iter!(TrieMap)
