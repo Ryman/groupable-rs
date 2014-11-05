@@ -36,32 +36,29 @@ pub trait FromKeyedIterator<K, V> {
     fn from_keyed_iter<I: Iterator<(K, V)>>(I) -> Self;
 }
 
-#[inline(always)]
-fn group_into<K,
-              V,
-              U: Extendable<V>,
-              I: Iterator<(K, V)>,
-              M: MutableMap<K, U>>(mut iter: I, map: &mut M) {
-    for (key, val) in iter {
-        let val_iter = Some(val).into_iter();
-        match map.find_mut(&key) {
-            Some(collection) => {
-                collection.extend(val_iter);
-                continue
-            },
-            None => {} // insert below
-        }
+macro_rules! group_into(
+    ($iter:ident, $map:ident) => (
+        for (key, val) in $iter {
+            let val_iter = Some(val).into_iter();
+            match $map.find_mut(&key) {
+                Some(collection) => {
+                    collection.extend(val_iter);
+                    continue
+                },
+                None => {} // insert below
+            }
 
-        map.insert(key, FromIterator::from_iter(val_iter));
-    }
-}
+            $map.insert(key, FromIterator::from_iter(val_iter));
+        }
+    )
+)
 
 macro_rules! impl_keyed_iter (
     ($name:ident: $($bounds:ident),+) => (
         impl <K: $($bounds+)+, V, U: Extendable<V>> FromKeyedIterator<K, V> for $name<K, U> {
-            fn from_keyed_iter<T: Iterator<(K, V)>>(iter: T) -> $name<K, U> {
+            fn from_keyed_iter<T: Iterator<(K, V)>>(mut iter: T) -> $name<K, U> {
                 let mut map = $name::<K, U>::new();
-                group_into(iter, &mut map);
+                group_into!(iter, map);
                 map
             }
         }
@@ -71,9 +68,9 @@ macro_rules! impl_keyed_iter (
 macro_rules! impl_uint_keyed_iter (
     ($name:ident) => (
         impl <V, U: Extendable<V>> FromKeyedIterator<uint, V> for $name<U> {
-            fn from_keyed_iter<T: Iterator<(uint, V)>>(iter: T) -> $name<U> {
+            fn from_keyed_iter<T: Iterator<(uint, V)>>(mut iter: T) -> $name<U> {
                 let mut map = $name::<U>::new();
-                group_into(iter, &mut map);
+                group_into!(iter, map)
                 map
             }
         }
