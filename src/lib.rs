@@ -55,7 +55,7 @@ macro_rules! group_into(
 
 macro_rules! impl_keyed_iter (
     ($name:ident: $($bounds:ident),+) => (
-        impl <K: $($bounds+)+, V, U: Extendable<V>> FromKeyedIterator<K, V> for $name<K, U> {
+        impl <K: $($bounds+)+, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for $name<K, U> {
             fn from_keyed_iter<T: Iterator<(K, V)>>(mut iter: T) -> $name<K, U> {
                 let mut map = $name::<K, U>::new();
                 group_into!(iter, map);
@@ -67,7 +67,7 @@ macro_rules! impl_keyed_iter (
 
 macro_rules! impl_uint_keyed_iter (
     ($name:ident) => (
-        impl <V, U: Extendable<V>> FromKeyedIterator<uint, V> for $name<U> {
+        impl <V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<uint, V> for $name<U> {
             fn from_keyed_iter<T: Iterator<(uint, V)>>(mut iter: T) -> $name<U> {
                 let mut map = $name::<U>::new();
                 group_into!(iter, map)
