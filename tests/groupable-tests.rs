@@ -4,7 +4,7 @@ extern crate groupable;
 use std::collections::{HashMap, TreeMap, VecMap, TrieMap};
 use groupable::Groupable;
 
-static XS : &'static [char] = ['h', 'b', 'i', 'y', '!', 'e'];
+static XS : &'static [char] = &['h', 'b', 'i', 'y', '!', 'e'];
 
 macro_rules! test_string (
     ($t:ty) => (
