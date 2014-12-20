@@ -51,7 +51,7 @@ macro_rules! group_into(
             $map.insert(key, FromIterator::from_iter(val_iter));
         }
     )
-)
+);
 
 macro_rules! impl_keyed_iter (
     ($name:ident: $($bounds:ident),+) => (
@@ -63,21 +63,21 @@ macro_rules! impl_keyed_iter (
             }
         }
     )
-)
+);
 
 macro_rules! impl_uint_keyed_iter (
     ($name:ident) => (
         impl <V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<uint, V> for $name<U> {
             fn from_keyed_iter<T: Iterator<(uint, V)>>(mut iter: T) -> $name<U> {
                 let mut map = $name::<U>::new();
-                group_into!(iter, map)
+                group_into!(iter, map);
                 map
             }
         }
     )
-)
+);
 
-impl_keyed_iter!(HashMap: Ord, Hash)
-impl_keyed_iter!(TreeMap: Ord)
-impl_uint_keyed_iter!(VecMap)
-impl_uint_keyed_iter!(TrieMap)
+impl_keyed_iter!(HashMap: Ord, Hash);
+impl_keyed_iter!(TreeMap: Ord);
+impl_uint_keyed_iter!(VecMap);
+impl_uint_keyed_iter!(TrieMap);
