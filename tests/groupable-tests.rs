@@ -17,7 +17,7 @@ macro_rules! test_string (
             assert_eq!(map[1].as_slice(), "bye");
         }
     )
-)
+);
 
 macro_rules! test_char_vec (
     ($t:ty) => (
@@ -30,28 +30,28 @@ macro_rules! test_char_vec (
             assert_eq!(map[1].as_slice(), ['b', 'y', 'e'].as_slice());
         }
     )
-)
+);
 
 #[test]
 fn hashmap() {
-    test_string!(HashMap<uint, String>)
-    test_char_vec!(HashMap<uint, Vec<char>>)
+    test_string!(HashMap<uint, String>);
+    test_char_vec!(HashMap<uint, Vec<char>>);
 }
 
 #[test]
 fn treemap() {
-    test_string!(TreeMap<uint, String>)
-    test_char_vec!(TreeMap<uint, Vec<char>>)
+    test_string!(TreeMap<uint, String>);
+    test_char_vec!(TreeMap<uint, Vec<char>>);
 }
 
 #[test]
 fn smallintmap() {
-    test_string!(VecMap<String>)
-    test_char_vec!(VecMap<Vec<char>>)
+    test_string!(VecMap<String>);
+    test_char_vec!(VecMap<Vec<char>>);
 }
 
 #[test]
 fn triemap() {
-    test_string!(TrieMap<String>)
-    test_char_vec!(TrieMap<Vec<char>>)
+    test_string!(TrieMap<String>);
+    test_char_vec!(TrieMap<Vec<char>>);
 }
