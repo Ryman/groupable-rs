@@ -1,4 +1,3 @@
-#![feature(macro_rules)]
 extern crate groupable;
 
 use std::collections::{HashMap, VecMap};
@@ -34,8 +33,8 @@ macro_rules! test_char_vec (
 
 #[test]
 fn hashmap() {
-    test_string!(HashMap<uint, String>);
-    test_char_vec!(HashMap<uint, Vec<char>>);
+    test_string!(HashMap<usize, String>);
+    test_char_vec!(HashMap<usize, Vec<char>>);
 }
 
 #[test]
