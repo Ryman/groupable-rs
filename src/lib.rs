@@ -1,6 +1,8 @@
-#![feature(macro_rules)]
+use std::collections::hash_map::Hasher;
 use std::collections::{HashMap, VecMap};
 use std::hash::Hash;
+use std::iter::FromIterator;
+
 
 /// Conversion from an `Iterator` of pairs.
 pub trait Groupable<K, V> {
@@ -24,7 +26,7 @@ pub trait Groupable<K, V> {
     fn group<B: FromKeyedIterator<K, V>>(&mut self) -> B;
 }
 
-impl<K, V, I: Iterator<(K, V)>> Groupable<K, V> for I {
+impl<K, V, I: Iterator<Item=(K, V)>> Groupable<K, V> for I {
     fn group<B: FromKeyedIterator<K, V>>(&mut self) -> B {
         FromKeyedIterator::from_keyed_iter(self.by_ref())
     }
@@ -33,14 +35,14 @@ impl<K, V, I: Iterator<(K, V)>> Groupable<K, V> for I {
 /// Conversion from an `Iterator` of key-value pairs.
 pub trait FromKeyedIterator<K, V> {
     /// Build a container with groups of elements from an external iterator.
-    fn from_keyed_iter<I: Iterator<(K, V)>>(I) -> Self;
+    fn from_keyed_iter<I: Iterator<Item=(K, V)>>(I) -> Self;
 }
 
 macro_rules! group_into(
     ($iter:ident, $map:ident) => (
         for (key, val) in $iter {
             let val_iter = Some(val).into_iter();
-            match $map.find_mut(&key) {
+            match $map.get_mut(&key) {
                 Some(collection) => {
                     collection.extend(val_iter);
                     continue
@@ -53,29 +55,24 @@ macro_rules! group_into(
     )
 );
 
-macro_rules! impl_keyed_iter (
-    ($name:ident: $($bounds:ident),+) => (
-        impl <K: $($bounds+)+, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for $name<K, U> {
-            fn from_keyed_iter<T: Iterator<(K, V)>>(mut iter: T) -> $name<K, U> {
-                let mut map = $name::<K, U>::new();
-                group_into!(iter, map);
-                map
-            }
-        }
-    )
-);
+impl<K: Hash<Hasher> + Ord, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for HashMap<K, U> {
+    fn from_keyed_iter<T: Iterator<Item=(K, V)>>(mut iter: T) -> HashMap<K, U> {
+        let mut map = HashMap::<K, U>::new();
+        group_into!(iter, map);
+        map
+    }
+}
 
-macro_rules! impl_uint_keyed_iter (
+macro_rules! impl_uint_keyed_iter {
     ($name:ident) => (
-        impl <V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<uint, V> for $name<U> {
-            fn from_keyed_iter<T: Iterator<(uint, V)>>(mut iter: T) -> $name<U> {
+        impl <V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<usize, V> for $name<U> {
+            fn from_keyed_iter<T: Iterator<Item=(usize, V)>>(mut iter: T) -> $name<U> {
                 let mut map = $name::<U>::new();
                 group_into!(iter, map);
                 map
             }
         }
     )
-);
+}
 
-impl_keyed_iter!(HashMap: Ord, Hash);
 impl_uint_keyed_iter!(VecMap);
