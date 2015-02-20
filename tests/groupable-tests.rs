@@ -1,3 +1,4 @@
+#![feature(collections)]
 extern crate groupable;
 
 use std::collections::{HashMap, VecMap};

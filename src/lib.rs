@@ -1,4 +1,4 @@
-use std::collections::hash_map::Hasher;
+#![feature(collections)]
 use std::collections::{HashMap, VecMap};
 use std::hash::Hash;
 use std::iter::FromIterator;
@@ -55,8 +55,8 @@ macro_rules! group_into(
     )
 );
 
-impl<K: Hash<Hasher> + Ord, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for HashMap<K, U> {
-    fn from_keyed_iter<T: Iterator<Item=(K, V)>>(mut iter: T) -> HashMap<K, U> {
+impl<K: Hash + Ord, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for HashMap<K, U> {
+    fn from_keyed_iter<T: Iterator<Item=(K, V)>>(iter: T) -> HashMap<K, U> {
         let mut map = HashMap::<K, U>::new();
         group_into!(iter, map);
         map
@@ -66,7 +66,7 @@ impl<K: Hash<Hasher> + Ord, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator
 macro_rules! impl_uint_keyed_iter {
     ($name:ident) => (
         impl <V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<usize, V> for $name<U> {
-            fn from_keyed_iter<T: Iterator<Item=(usize, V)>>(mut iter: T) -> $name<U> {
+            fn from_keyed_iter<T: Iterator<Item=(usize, V)>>(iter: T) -> $name<U> {
                 let mut map = $name::<U>::new();
                 group_into!(iter, map);
                 map
