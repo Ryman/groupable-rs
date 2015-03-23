@@ -1,4 +1,3 @@
-#![feature(collections)]
 use std::collections::{HashMap, VecMap};
 use std::hash::Hash;
 use std::iter::FromIterator;
@@ -9,7 +8,7 @@ pub trait Groupable<K, V> {
     /// Loops through the entire iterator, grouping all keys into a container
     /// implementing `FromKeyedIterator` with a container of values per key.
     /// The values will be aggregated per key into a container implementing
-    /// `Extendable` for the value type.
+    /// `Extend` for the value type.
     ///
     /// # Example
     ///
@@ -17,11 +16,11 @@ pub trait Groupable<K, V> {
     /// use std::collections::HashMap;
     /// use groupable::Groupable;
     ///
-    /// let evens = range(0u, 10).map(|i| (i % 2 == 0, i))
-    ///                         .group::<HashMap<bool, Vec<uint>>>();
+    /// let evens = (0..10).map(|i| (i % 2 == 0, i))
+    ///                    .group::<HashMap<bool, Vec<usize>>>();
     ///
-    /// assert_eq!(evens[true].as_slice(), [0, 2, 4, 6, 8].as_slice());
-    /// assert_eq!(evens[false].as_slice(), [1, 3, 5, 7, 9].as_slice());
+    /// assert_eq!(evens[true], [0, 2, 4, 6, 8]);
+    /// assert_eq!(evens[false], [1, 3, 5, 7, 9]);
     /// ```
     fn group<B: FromKeyedIterator<K, V>>(&mut self) -> B;
 }

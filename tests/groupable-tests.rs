@@ -13,8 +13,8 @@ macro_rules! test_string (
                            .map(|(i, &c)| (i % 2, c))
                            .group::<$t>();
 
-            assert_eq!(map[0].as_slice(), "hi!");
-            assert_eq!(map[1].as_slice(), "bye");
+            assert_eq!(map[0], "hi!");
+            assert_eq!(map[1], "bye");
         }
     )
 );
@@ -26,8 +26,8 @@ macro_rules! test_char_vec (
                            .map(|(i, &c)| (i % 2, c))
                            .group::<$t>();
 
-            assert_eq!(map[0].as_slice(), ['h', 'i', '!'].as_slice());
-            assert_eq!(map[1].as_slice(), ['b', 'y', 'e'].as_slice());
+            assert_eq!(map[0], ['h', 'i', '!']);
+            assert_eq!(map[1], ['b', 'y', 'e']);
         }
     )
 );
