@@ -1,6 +1,4 @@
-#![feature(collections)]
-
-use std::collections::{HashMap, VecMap, BTreeMap};
+use std::collections::{HashMap, /* VecMap,*/ BTreeMap};
 use std::hash::Hash;
 use std::iter::FromIterator;
 
@@ -82,4 +80,5 @@ macro_rules! impl_uint_keyed_iter {
 
 impl_keyed_iter!(HashMap: Ord, Hash);
 impl_keyed_iter!(BTreeMap: Ord);
-impl_uint_keyed_iter!(VecMap);
+// FIXME: Unstable until rust ~1.1
+// impl_uint_keyed_iter!(VecMap);

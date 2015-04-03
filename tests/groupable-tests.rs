@@ -1,7 +1,6 @@
-#![feature(collections)]
 extern crate groupable;
 
-use std::collections::{HashMap, VecMap, BTreeMap};
+use std::collections::{HashMap, /*VecMap,*/ BTreeMap};
 use groupable::Groupable;
 
 static XS : &'static [char] = &['h', 'b', 'i', 'y', '!', 'e'];
@@ -38,11 +37,11 @@ fn hashmap() {
     test_char_vec!(HashMap<usize, Vec<char>>);
 }
 
-#[test]
-fn smallintmap() {
-    test_string!(VecMap<String>);
-    test_char_vec!(VecMap<Vec<char>>);
-}
+// #[test]
+// fn smallintmap() {
+//     test_string!(VecMap<String>);
+//     test_char_vec!(VecMap<Vec<char>>);
+// }
 
 #[test]
 fn btreemap() {

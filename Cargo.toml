@@ -1,7 +1,7 @@
 [package]
 
 name = "groupable"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Kevin Butler <haqkrs@gmail.com>"]
 
 description = "Easily aggregate groups of values from key-value Iterators"
