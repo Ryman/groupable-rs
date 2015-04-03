@@ -3,3 +3,8 @@
 name = "groupable"
 version = "0.1.0"
 authors = ["Kevin Butler <haqkrs@gmail.com>"]
+
+description = "Easily aggregate groups of values from key-value Iterators"
+license = "MIT"
+homepage = "https://github.com/ryman/groupable-rs"
+repository = "https://github.com/ryman/groupable-rs"
