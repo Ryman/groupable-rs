@@ -1,6 +1,6 @@
 #![feature(collections)]
 
-use std::collections::{HashMap, VecMap};
+use std::collections::{HashMap, VecMap, BTreeMap};
 use std::hash::Hash;
 use std::iter::FromIterator;
 
@@ -56,13 +56,17 @@ macro_rules! group_into(
     )
 );
 
-impl<K: Hash + Ord, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for HashMap<K, U> {
-    fn from_keyed_iter<T: Iterator<Item=(K, V)>>(iter: T) -> HashMap<K, U> {
-        let mut map = HashMap::<K, U>::new();
-        group_into!(iter, map);
-        map
-    }
-}
+macro_rules! impl_keyed_iter (
+    ($name:ident: $($bounds:ident),+) => (
+        impl <K: $($bounds+)+, V, U: Extend<V> + FromIterator<V>> FromKeyedIterator<K, V> for $name<K, U> {
+            fn from_keyed_iter<T: Iterator<Item=(K, V)>>(iter: T) -> $name<K, U> {
+                let mut map = $name::<K, U>::new();
+                group_into!(iter, map);
+                map
+            }
+        }
+    )
+);
 
 macro_rules! impl_uint_keyed_iter {
     ($name:ident) => (
@@ -76,4 +80,6 @@ macro_rules! impl_uint_keyed_iter {
     )
 }
 
+impl_keyed_iter!(HashMap: Ord, Hash);
+impl_keyed_iter!(BTreeMap: Ord);
 impl_uint_keyed_iter!(VecMap);
